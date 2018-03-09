@@ -16,30 +16,31 @@ low_speed_count = 0
 
 loop do
     time = Time.now
-    hoge = %x(speedtest-cli --server 13641 --simple --no-upload) #サーバーは各自指定して
+    hoge = %x(speedtest-cli --server 13641 --simple --no-upload) #サーバーはググって各自指定して
     l = hoge.split()
     if l.length == 9
         speed = l[4]
         CSV.open('./speed_test.csv','a') do |test|
             test << [time.strftime('%F %T'),"#{speed}"]
         end
-        if speed.to_i > 30 && ( high_speed_count < 3 || low_speed_count == 5 )
+        if speed.to_i > 30 && ( high_speed_count < 3 || low_speed_count == 4 )
             p "high"
             tweet_text = "#{time}時点でのPingは#{l[1]+l[2]}で、速度は、#{l[3]+l[4]+l[5]}です"
-            high_speed_count += 1
+            high_speed_count += 1 if high_speed_count < 3
+            high_speed_count = 1 if low_speed_count == 4
             low_speed_count = 0
         elsif speed.to_i <= 30 && low_speed_count < 3 || speed.to_i < 1
             p "low"
             tweet_text = "#{time}時点でのPingは#{l[1]+l[2]}で、速度は、#{l[3]+l[4]+l[5]}です"
             high_speed_count = 0
             low_speed_count += 1
-        elsif high_speed_count == 4
+        elsif high_speed_count == 3
             p "end_tweet_high"
-            tweet_text = "人権が回復したようなのでアピールやめます。"
+            tweet_text = "{time}時点で人権が回復したようなのでアピールやめます。"
             high_speed_count += 1
-        elsif low_speed_count == 4
+        elsif low_speed_count == 3
             p "end_tweet_low"
-            tweet_text = "当分人権がなさそうなのでツイートをやめます。"
+            tweet_text = "{time}時点で当分人権がなさそうなのでツイートをやめます。"
             low_speed_count += 1
         else
             p "not_tweet"
