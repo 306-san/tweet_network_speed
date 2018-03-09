@@ -11,8 +11,8 @@ client = Twitter::REST::Client.new do |config|
 end
 
 low_speed_flag = false
-high_speed_count = 5
-low_speed_count = 5
+high_speed_count = 0
+low_speed_count = 0
 
 loop do
     time = Time.now
