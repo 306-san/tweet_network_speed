@@ -1,0 +1,9 @@
+version: '3'
+services:
+  tweet_network_speed:
+    build: .
+    environment:
+      - LANG="C.UTF-8"
+      - TZ="Asia/Tokyo"
+    volumes:
+      - ./:/tweet_network_speed:cached
