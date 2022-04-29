@@ -16,7 +16,7 @@ low_speed_count = 0
 
 loop do
     time = Time.now
-    hoge = %x(speedtest-cli --server 13641 --simple --no-upload) #サーバーはググって各自指定して
+    hoge = %x(speedtest-cli --server 17838 --simple --no-upload) #サーバーはググって各自指定して
     l = hoge.split()
     if l.length == 9
         speed = l[4]
